@@ -5,23 +5,30 @@ import connectDB from './config/mongodb.js';
 import bookingRoutes from './routes/reservation.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
+// Initialize the application
 const app = express();
-const port = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
-// Init DB
+// Connect to MongoDB Atlas
 connectDB();
 
-// Middlewares
+// Global Middlewares
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // Parse incoming JSON requests
 
-// Main Routes
+// API Routes
 app.use('/api/bookings', bookingRoutes);
 
-app.get('/', (req, res) => res.send('Booking API is live'));
+// Base Route for health check
+app.get('/', (req, res) => {
+    res.status(200).send('Booking System API is running smoothly.');
+});
 
-// Error handling
-app.use(notFound);
-app.use(errorHandler);
+// Error Handling Middleware
+app.use(notFound);      // Handle 404s
+app.use(errorHandler);  // Handle internal server errors
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+// Start the server
+app.listen(PORT, () => {
+    console.log(`🚀 Server is live on port ${PORT}`);
+});

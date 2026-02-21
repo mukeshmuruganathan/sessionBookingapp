@@ -24,7 +24,7 @@ export default function BookingForm() {
         (async () => {
             setLoading(true);
             try {
-                const { data } = await bookingService.getSlots(form.date);
+                const { data } = await bookingService.getOccupiedSlots(form.date);
                 setBooked(data);
                 if (data.includes(form.time)) setForm(f => ({ ...f, time: '' }));
             } catch (e) {
@@ -41,7 +41,7 @@ export default function BookingForm() {
 
         setSubmitting(true);
         try {
-            await bookingService.create(form);
+            await bookingService.createNewBooking(form);
             toast.success('Booking confirmed!');
             setForm({ ...form, time: '' }); // keep name/email for convenience if user wants? no, clear it.
             setForm({ fullName: '', email: '', phone: '', date: format(new Date(), 'yyyy-MM-dd'), time: '' });

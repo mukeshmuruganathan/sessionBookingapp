@@ -16,8 +16,8 @@ export default function AdminDashboard() {
         setLoading(true);
         try {
             const [{ data: bData }, { data: sData }] = await Promise.all([
-                bookingService.get(page, search),
-                bookingService.getStats()
+                bookingService.getAllBookings(page, search),
+                bookingService.getDashboardStatistics()
             ]);
             setData(bData);
             setStats(sData);
@@ -36,7 +36,7 @@ export default function AdminDashboard() {
     const deleteItem = async (id) => {
         if (!window.confirm('Delete this booking?')) return;
         try {
-            await bookingService.delete(id);
+            await bookingService.cancelBooking(id);
             toast.success('Removed');
             fetchEverything();
         } catch (e) {
